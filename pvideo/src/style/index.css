@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+}
+
+.video {
+  width: 100%;
+  height: calc(100vh - 89px);
+  overflow: hidden;
+}
+
+.caller_video {
+  position: absolute;
+  border: 1px solid #cddfe7;
+  bottom: 231px;
+  right: 40px;
+  width: 337px;
+}
+
+.receiver_video {
+  width: 100%;
+  border: 1px solid lightgray;
+}
+
+@media (max-width: 1024px) {
+  .caller_video {
+    position: static;
+    margin-top: 15%;
+    width: 100%;
+  }
+}
