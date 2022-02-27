@@ -13,12 +13,9 @@ const App: FunctionalComponent = () => {
         let callerVideo = document.querySelector(
           ".caller_video"
         ) as HTMLVideoElement;
-        let receiverVideo = document.querySelector(
-          ".receiver_video"
-        ) as HTMLVideoElement;
+
         if (callerVideo) {
           callerVideo.srcObject = stream;
-          receiverVideo.srcObject = stream;
         } else {
           console.error(`Cant Find video element`);
         }
