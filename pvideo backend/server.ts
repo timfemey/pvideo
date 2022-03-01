@@ -17,6 +17,7 @@ export class Server {
 
   private activeSockets: string[] = [];
 
+  //Initiaize socket.io and Server
   private initialize(): void {
     this.app = express();
     this.httpServer = createServer(this.app);
@@ -25,7 +26,7 @@ export class Server {
 
   private handleRoutes(): void {
     this.app.get("/", (req, res) => {
-      res.send(`<h1>Hello World</h1>`);
+      res.send(`<h1>Pvideo Server Connected</h1>`);
     });
   }
 
@@ -45,10 +46,40 @@ export class Server {
           ),
         });
 
-        socket.broadcast.emit("user_added", {
+        socket.broadcast.emit("users_added", {
           users: [socket.id],
         });
       }
+
+      //On Call Action/Event
+      socket.on("call", (res) => {
+        socket.to(res.receiver).emit("call_alert", {
+          request_to_call: res.call,
+          socket_id: socket.id,
+        });
+      });
+
+      //Receiver Declined Call
+      socket.on("decline", (data) => {
+        socket.to(data.receiver).emit("call_rejected", {
+          socket_id: socket.id,
+        });
+      });
+
+      //When Answering Call send this data to client
+      socket.on("answer", (res) => {
+        socket.to(res.receiver).emit("answered", {
+          socket_id: socket.id,
+          answer: res.answer,
+        });
+      });
+
+      //Disconnection happens
+      socket.on("disconnect", () => {
+        this.activeSockets = this.activeSockets.filter(
+          (fullSocket) => fullSocket !== socket.id
+        );
+      });
     });
   }
 
